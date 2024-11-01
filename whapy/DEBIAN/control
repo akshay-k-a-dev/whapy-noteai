@@ -1,0 +1,8 @@
+Package: whapy-noteai
+Version: 1.0
+Section: base
+Priority: optional
+Architecture: all
+Depends: python3, python3-pywhatkit, python3-tk
+Maintainer: Akshay Ka <akshayka@mamocollege.org>
+Description: A brief description of your package
