@@ -15,6 +15,9 @@ def send_messages():
     
     message = message_entry.get("1.0", tk.END).strip()
     
+    # Check if media file is selected
+    media_file = media_path.get()
+    
     # Send messages
     for number in numbers:
         try:
@@ -32,7 +35,10 @@ def send_messages():
                 hour -= 24
             
             # Send the message
-            kit.sendwhatmsg(number, message, hour, minute)
+            if media_file.lower().endswith(('.jpg', '.jpeg', '.png')):
+                kit.sendwhats_image(number, media_file, message, wait_time=15)
+            else:
+                kit.sendwhatmsg(number, message, hour, minute)
             
             # Sleep for a short period to avoid spamming WhatsApp
             time.sleep(15)  # Wait 15 seconds before sending the next message
@@ -49,12 +55,19 @@ def upload_file():
     if path:
         file_path.set(path)
 
+# Function to upload media file
+def upload_media():
+    path = filedialog.askopenfilename(filetypes=[("Images", "*.jpg;*.jpeg;*.png"), ("Videos", "*.mp4;*.mov;*.avi")])
+    if path:
+        media_path.set(path)
+
 # GUI setup
 app = tk.Tk()
 app.title("Whap-NOTEAI")
-app.geometry("400x300")
+app.geometry("400x400")
 
 file_path = tk.StringVar()
+media_path = tk.StringVar()
 
 # Title label
 title_label = tk.Label(app, text="Whap-NOTEAI", font=("Helvetica", 20, "bold"))
@@ -71,9 +84,12 @@ message_label.pack(pady=5)
 message_entry = tk.Text(app, height=5, width=40)
 message_entry.pack(pady=10)
 
+# Upload media button
+media_button = tk.Button(app, text="Upload Media File", command=upload_media)
+media_button.pack(pady=10)
+
 # Send button
 send_button = tk.Button(app, text="Send Messages", command=send_messages)
 send_button.pack(pady=20)
 
 app.mainloop()
-
